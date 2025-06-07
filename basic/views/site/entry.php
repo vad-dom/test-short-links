@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\web\JqueryAsset;
 
 $this->registerJsFile(
-    '@web/js/sc.js',
+    '@web/js/entry.js',
     ['depends' => [JqueryAsset::class]],
 );
 
@@ -14,14 +14,14 @@ $this->registerJsFile(
 <?php
     $form = ActiveForm::begin([
         'id' => 'entry-form',
-        'action' => '/site/save',
+        'action' => '/site/shorten',
         'enableAjaxValidation' => false,
         //'validationUrl' => ['entry-validation-url'],
         'options' => ['class' => 'd-flex justify-content-between gap-2'],
     ]);
 ?>
     <?=
-        $form->field($model, 'email', ['options' => ['class' => 'h-100 flex-grow-1']])
+        $form->field($model, 'url', ['options' => ['class' => 'h-100 flex-grow-1']])
             ->textInput(['placeholder' => 'Скопируйте сюда ссылку'])
             ->label(false)
     ?>
@@ -29,7 +29,7 @@ $this->registerJsFile(
 <?php ActiveForm::end(); ?>
 
 <div id="result" style="display:none;">
-    <div class="mt-4 alert alert-success d-flex justify-content-between">
+    <div class="mt-4 alert alert-success d-flex flex-wrap justify-content-between gap-2">
         <div>
             <p class="mb-1">Короткая ссылка:</p>
             <a href="#" id="s-link" target="_blank"></a>

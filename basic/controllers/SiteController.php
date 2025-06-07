@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -12,6 +13,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\EntryForm;
 use Da\QrCode\QrCode;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -64,18 +66,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        //return $this->render('index');
         $model = new EntryForm();
-
         return $this->render('entry', ['model' => $model]);
     }
 
     public function actionSave()
     {
-        //return $this->render('index');
         $model = new EntryForm();
-
-        //echo '111';
 
         $p = Yii::$app->request->post();
         print_r($p);
@@ -107,26 +104,31 @@ class SiteController extends Controller
         }
     }
 
-    public function actionTest()
+    public function actionShorten()
     {
-        $form_model = new EntryForm();
-        if(Yii::$app->request->isAjax){
-            if ($form_model->load(Yii::$app->request->post()) && $form_model->validate()) {
-                //return json_encode($form_model);
-                $qqq = Yii::$app->getModule('shortener')->short($form_model->email);
-                $qrCode = (new QrCode($form_model->email))
-                    ->setSize(100);
-                    //->setMargin(5);
+        $entry = new EntryForm();
+        if (Yii::$app->request->isAjax) {
+            if ($entry->load(Yii::$app->request->post()) && $entry->validate()) {
+                $shortCode = Yii::$app->getModule('shortener')->short($entry->url);
+                $qrCode = (new QrCode($entry->url))
+                    ->setSize(100)
+                    ->setMargin(5);
 
-                $qrCode->writeFile(__DIR__ . '/code.png');
+                $qrCode->writeFile(__DIR__ . '/../web/img/qr_code.png');
 
-                $www = Yii::$app->request->hostInfo . '/' . $qqq;
+                $shortLink = Yii::$app->request->hostInfo . '/' . $shortCode;
+                $shortLinkText = Yii::$app->request->serverName . '/' . $shortCode;
 
                 Yii::$app->response->format = Response::FORMAT_JSON;
-                return ['model' => $form_model, 'qr' => $qrCode->writeDataUri(), 'www' => $www];
+                return [
+                    'model' => $entry,
+                    'qr_code' => $qrCode->writeDataUri(),
+                    'short_link' => $shortLink,
+                    'short_link_text' => $shortLinkText,
+                ];
             }
-            if ($form_model->hasErrors()) {
-                throw new HttpException(400, $form_model->getFirstError('email'));
+            if ($entry->hasErrors()) {
+                throw new HttpException(400, $entry->getFirstError('url'));
             }
             return 'Запрос принят!';
         }
