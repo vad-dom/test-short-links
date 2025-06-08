@@ -70,40 +70,6 @@ class SiteController extends Controller
         return $this->render('entry', ['model' => $model]);
     }
 
-    public function actionSave()
-    {
-        $model = new EntryForm();
-
-        $p = Yii::$app->request->post();
-        print_r($p);
-
-        if ($model->load($p) && $model->validate()) {
-            // valid data received in $model
-
-            // do something meaningful here about $model ...
-            $qqq = Yii::$app->getModule('shortener')->short($model->email);
-
-            //$qr = Yii::$app->get('qr');
-
-            //Yii::$app->response->format = Response::FORMAT_RAW;
-            //Yii::$app->response->headers->add('Content-Type', $qr->getContentType());
-
-            $qrCode = (new QrCode($model->email))
-                ->setSize(250);
-                //->setMargin(5);
-
-            $qrCode->writeFile(__DIR__ . '/code.png');
-
-            //$www =Yii::$app->getModule('shortener')->expand($qqq);
-            $www = Yii::$app->request->hostInfo . '/' . $qqq;
-
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['success' => true, 'model' => $model, 'qr' => $qrCode->writeDataUri(), 'www' => $www];
-
-            //return $this->render('entry-confirm', ['model' => $model, 'qr' => $qrCode->writeDataUri(), 'www' => $www]);
-        }
-    }
-
     public function actionShorten()
     {
         $entry = new EntryForm();
@@ -199,36 +165,5 @@ class SiteController extends Controller
     public function actionSay($message = 'Hello')
     {
         return $this->render('say', ['message' => $message]);
-    }
-
-    public function actionEntry()
-    {
-        $model = new EntryForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // valid data received in $model
-
-            // do something meaningful here about $model ...
-            $qqq = Yii::$app->getModule('shortener')->short($model->email);
-
-            //$qr = Yii::$app->get('qr');
-
-            //Yii::$app->response->format = Response::FORMAT_RAW;
-            //Yii::$app->response->headers->add('Content-Type', $qr->getContentType());
-
-            $qrCode = (new QrCode($model->email))
-                ->setSize(250)
-                ->setMargin(5);
-
-            $qrCode->writeFile(__DIR__ . '/code.png');
-
-            //$www =Yii::$app->getModule('shortener')->expand($qqq);
-            $www = Yii::$app->request->hostInfo . '/' . Yii::$app->getModule('shortener')->urlConvert($qqq);
-
-            return $this->render('entry-confirm', ['model' => $model, 'qr' => $qrCode->writeDataUri(), 'www' => $www]);
-        } else {
-            // either the page is initially displayed or there is some validation error
-            return $this->render('entry', ['model' => $model]);
-        }
     }
 }
