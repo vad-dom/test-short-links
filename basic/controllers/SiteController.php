@@ -2,6 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\ShortenerLogClicks;
+use app\models\ShortenerLogIP;
+use eseperio\shortener\models\Shortener;
 use Yii;
 use yii\db\Exception;
 use yii\filters\AccessControl;
@@ -91,6 +94,7 @@ class SiteController extends Controller
                     'qr_code' => $qrCode->writeDataUri(),
                     'short_link' => $shortLink,
                     'short_link_text' => $shortLinkText,
+                    'short_code' => $shortCode,
                 ];
             }
             if ($entry->hasErrors()) {
@@ -98,6 +102,39 @@ class SiteController extends Controller
             }
             return 'Запрос принят!';
         }
+    }
+
+    public function actionClick()
+    {
+        if (Yii::$app->request->isAjax) {
+            $shortCode = Yii::$app->request->post('short_code');
+            $shortener = Shortener::findOne(['shortened' => $shortCode]);
+            $shortenerId = $shortener ? $shortener->id : 0;
+            $logClicks = ShortenerLogClicks::find()->where(['shortener_id' => $shortenerId])->one();
+            if (!$logClicks) {
+                $logClicks = new ShortenerLogClicks();
+                $logClicks->shortener_id = $shortenerId;
+                $logClicks->clicks = 1;
+            } else {
+                $logClicks->clicks = $logClicks->clicks + 1;
+            }
+            $logClicks->save();
+
+            $logIP = new ShortenerLogIP();
+            $logIP->shortener_id = $shortenerId;
+            $logIP->ip_address = Yii::$app->request->userIP;
+            $logIP->save();
+
+            if ($logClicks->hasErrors()) {
+                throw new HttpException(400, $logClicks->getFirstError('shortener_id'));
+            }
+
+            return true;
+        }
+/*        if ($entry->hasErrors()) {
+            throw new HttpException(400, $entry->getFirstError('url'));
+        }
+        return 'Запрос принят!';*/
     }
 
     /**
