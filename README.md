@@ -23,7 +23,12 @@
       <b>cd <путь></b>
     </ul>
   </li>
-  <li>Создать клон репозитория: </li>
+  <li>
+    Создать клон репозитория: 
+    <ul>
+      <b>git clone https://github.com/vad-dom/test-short-links.git</b>
+    </ul>
+  </li>
   <li>Composer</li>
   <li>
     PHP extensions
