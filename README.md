@@ -32,8 +32,8 @@
   <li>
     Обновить до последних версий и установить зависимости в Composer: 
     <ul>
-      <b>composer update</b>
-      <b>composer install</b>
+      <li><b>composer update</b></li>
+      <li><b>composer install</b></li>
     </ul>
   </li>
   <li>
