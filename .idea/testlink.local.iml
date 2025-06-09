@@ -30,7 +30,6 @@
       <excludeFolder url="file://$MODULE_DIR$/basic/vendor/doctrine/instantiator" />
       <excludeFolder url="file://$MODULE_DIR$/basic/vendor/doctrine/lexer" />
       <excludeFolder url="file://$MODULE_DIR$/basic/vendor/egulias/email-validator" />
-      <excludeFolder url="file://$MODULE_DIR$/basic/vendor/erosdelalamo/yii2-url-shortener" />
       <excludeFolder url="file://$MODULE_DIR$/basic/vendor/ezyang/htmlpurifier" />
       <excludeFolder url="file://$MODULE_DIR$/basic/vendor/fakerphp/faker" />
       <excludeFolder url="file://$MODULE_DIR$/basic/vendor/guzzlehttp/psr7" />

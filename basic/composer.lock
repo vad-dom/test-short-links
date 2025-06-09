@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "621f78cbdbe0cba6dbdee3f163551297",
+    "content-hash": "aa850325cda891304d330ebe3f8669df",
     "packages": [
         {
             "name": "2amigos/qrcode-library",
@@ -537,49 +537,6 @@
                 }
             ],
             "time": "2023-06-01T07:04:22+00:00"
-        },
-        {
-            "name": "erosdelalamo/yii2-url-shortener",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Eseperio/yii2-url-shortener.git",
-                "reference": "feb8a2ce25a9e1d5b21c3556b0cc6686c6a63c9b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Eseperio/yii2-url-shortener/zipball/feb8a2ce25a9e1d5b21c3556b0cc6686c6a63c9b",
-                "reference": "feb8a2ce25a9e1d5b21c3556b0cc6686c6a63c9b",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "^2.0@dev"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "bootstrap": "eseperio\\shortener\\Bootstrap"
-            },
-            "autoload": {
-                "psr-4": {
-                    "eseperio\\shortener\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "E.Alamo",
-                    "email": "admin@example.com"
-                }
-            ],
-            "description": "An extension to work with own shortened urls",
-            "support": {
-                "issues": "https://github.com/Eseperio/yii2-url-shortener/issues",
-                "source": "https://github.com/Eseperio/yii2-url-shortener/tree/1.0.0"
-            },
-            "time": "2023-02-01T16:04:49+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",

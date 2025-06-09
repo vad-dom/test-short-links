@@ -2,9 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Shortener;
 use app\models\ShortenerLogClicks;
 use app\models\ShortenerLogIP;
-use eseperio\shortener\models\Shortener;
+//use eseperio\shortener\models\Shortener;
 use Yii;
 use yii\db\Exception;
 use yii\filters\AccessControl;
@@ -78,21 +79,32 @@ class SiteController extends Controller
         $entry = new EntryForm();
         if (Yii::$app->request->isAjax) {
             if ($entry->load(Yii::$app->request->post()) && $entry->validate()) {
-                $shortCode = Yii::$app->getModule('shortener')->short($entry->url);
-                $qrCode = (new QrCode($entry->url))
+
+                $shortener = new Shortener();
+                $shortener->url = $entry->url;
+                //$shortCode = Yii::$app->getModule('shortener')->short($shortener->url);
+                $shortCode = $shortener->generateShortCode();
+
+                //$shortener->url = Url::to($shortener->url, true);
+                $shortener->shortened = $shortCode;
+                $shortener->save();
+
+                $shortUrl = Yii::$app->urlManager->createAbsoluteUrl(['link/click', 'shortCode' => $shortCode]);
+
+                $shortLink = Yii::$app->request->hostInfo . '/' . $shortCode;
+                $shortLinkText = Yii::$app->request->serverName . '/' . $shortCode;
+
+                $qrCode = (new QrCode($shortUrl))
                     ->setSize(100)
                     ->setMargin(5);
 
                 $qrCode->writeFile(__DIR__ . '/../web/img/qr_code.png');
 
-                $shortLink = Yii::$app->request->hostInfo . '/' . $shortCode;
-                $shortLinkText = Yii::$app->request->serverName . '/' . $shortCode;
-
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 return [
-                    'model' => $entry,
+                    'model' => $shortener,
                     'qr_code' => $qrCode->writeDataUri(),
-                    'short_link' => $shortLink,
+                    'short_link' => $shortUrl,
                     'short_link_text' => $shortLinkText,
                     'short_code' => $shortCode,
                 ];

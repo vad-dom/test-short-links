@@ -6,10 +6,10 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => [
+/*    'bootstrap' => [
         'log',
         \eseperio\shortener\Bootstrap::class,
-    ],
+    ],*/
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -56,11 +56,11 @@ $config = [
         ],
     ],
     'params' => $params,
-    'modules' => [
+/*    'modules' => [
         'shortener' => [
             'class' => \eseperio\shortener\ShortenerModule::class
         ]
-    ],
+    ],*/
 ];
 
 if (YII_ENV_DEV) {

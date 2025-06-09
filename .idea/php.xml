@@ -102,7 +102,6 @@
       <path value="$PROJECT_DIR$/basic/vendor/psr/log" />
       <path value="$PROJECT_DIR$/basic/vendor/bacon/bacon-qr-code" />
       <path value="$PROJECT_DIR$/basic/vendor/theseer/tokenizer" />
-      <path value="$PROJECT_DIR$/basic/vendor/erosdelalamo/yii2-url-shortener" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
