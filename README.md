@@ -55,5 +55,12 @@
       <b>php yii migrate</b>
     </ul>
   </li>
+  <li>
+    Настроить веб сервер: 
+    <ul>
+      <li><b>https://www.yiiframework.com/doc/guide/2.0/ru/start-installation Раздел "Настройка веб сервера"</b></li>
+      <li><b>Папку домена указать /basic/web</b></li>
+    </ul>
+  </li>
 </ul>
 
