@@ -36,11 +36,11 @@
       <li><b>composer install</b></li>
     </ul>
   </li>
+  <li>Создать новую базу данных MySQL</li>
   <li>
-    PHP extensions
+    Настроить подключение к базе данных:
     <ul>
-      <li>pdo_mysql</li>
-      <li>curl</li>
+      <b>/basic/config/db.php</b>
     </ul>
   </li>
 </ul>
