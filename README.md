@@ -30,6 +30,12 @@
     </ul>
   </li>
   <li>
+    Перейти в папку basic: 
+    <ul>
+      <b>cd basic</b>
+    </ul>
+  </li>
+  <li>
     Обновить до последних версий и установить зависимости в Composer: 
     <ul>
       <li><b>composer update</b></li>
