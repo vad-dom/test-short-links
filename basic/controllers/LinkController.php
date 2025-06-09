@@ -3,35 +3,40 @@
 namespace app\controllers;
 
 use app\models\Shortener;
-use app\models\ShortenerLogClicks;
 use app\models\ShortenerLogIP;
+use yii\web\HttpException;
 use Yii;
 use yii\web\Controller;
-use yii\data\Pagination;
-use app\models\Country;
+use yii\web\Response;
 
 class LinkController extends Controller
 {
-    public function actionClick($shortCode)
+    /**
+     * Переход по короткой ссылке
+     *
+     * @param string $shortCode
+     * @return Response
+     * @throws HttpException
+     */
+    public function actionClick(string $shortCode): Response
     {
-        $shortener = Shortener::findOne(['shortened' => $shortCode]);
-        $shortenerId = $shortener ? $shortener->id : 0;
-        $logClicks = ShortenerLogClicks::find()->where(['shortener_id' => $shortenerId])->one();
-        if (!$logClicks) {
-            $logClicks = new ShortenerLogClicks();
-            $logClicks->shortener_id = $shortenerId;
-            $logClicks->clicks = 1;
-        } else {
-            $logClicks->clicks = $logClicks->clicks + 1;
+        try {
+            $shortener = Shortener::findOne(['shortened' => $shortCode]);
+            if (!$shortener) {
+                throw new HttpException(404, 'Ссылка не найдена');
+            }
+            $shortener->clicks += 1;
+            $shortener->save();
+
+            $logIP = new ShortenerLogIP();
+            $logIP->shortener_id = $shortener->id;
+            $logIP->ip_address = Yii::$app->request->userIP;
+            $logIP->save();
+
+            return $this->redirect($shortener->url);
+        } catch (\Exception $e) {
+            throw new HttpException(404, 'Ошибка при переходе по ссылке: ' . $e->getMessage());
         }
-        $logClicks->save();
-
-        $logIP = new ShortenerLogIP();
-        $logIP->shortener_id = $shortenerId;
-        $logIP->ip_address = Yii::$app->request->userIP;
-        $logIP->save();
-
-        return $this->redirect($shortener->url);
     }
 }
 

@@ -3,21 +3,16 @@
 namespace app\controllers;
 
 use app\models\Shortener;
-use app\models\ShortenerLogClicks;
-use app\models\ShortenerLogIP;
-//use eseperio\shortener\models\Shortener;
 use Yii;
 use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\web\HttpException;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\EntryForm;
 use Da\QrCode\QrCode;
-use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -64,89 +59,62 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Главная страница
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $model = new EntryForm();
         return $this->render('entry', ['model' => $model]);
     }
 
-    public function actionShorten()
+    /**
+     * Создание короткой ссылки
+     *
+     * @return array
+     */
+    public function actionShorten(): array
     {
         $entry = new EntryForm();
-        if (Yii::$app->request->isAjax) {
-            if ($entry->load(Yii::$app->request->post()) && $entry->validate()) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
-                $shortener = new Shortener();
-                $shortener->url = $entry->url;
-                //$shortCode = Yii::$app->getModule('shortener')->short($shortener->url);
-                $shortCode = $shortener->generateShortCode();
-
-                //$shortener->url = Url::to($shortener->url, true);
-                $shortener->shortened = $shortCode;
-                $shortener->save();
-
-                $shortUrl = Yii::$app->urlManager->createAbsoluteUrl(['link/click', 'shortCode' => $shortCode]);
-
-                $shortLink = Yii::$app->request->hostInfo . '/' . $shortCode;
-                $shortLinkText = Yii::$app->request->serverName . '/' . $shortCode;
-
-                $qrCode = (new QrCode($shortUrl))
-                    ->setSize(100)
-                    ->setMargin(5);
-
-                $qrCode->writeFile(__DIR__ . '/../web/img/qr_code.png');
-
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return [
-                    'model' => $shortener,
-                    'qr_code' => $qrCode->writeDataUri(),
-                    'short_link' => $shortUrl,
-                    'short_link_text' => $shortLinkText,
-                    'short_code' => $shortCode,
-                ];
-            }
-            if ($entry->hasErrors()) {
-                throw new HttpException(400, $entry->getFirstError('url'));
-            }
-            return 'Запрос принят!';
+        if (!Yii::$app->request->isAjax || !$entry->load(Yii::$app->request->post())) {
+            return ['ok' => false, 'errorMessage' => 'Непредвиденная ошибка. Мы уже работаем над этим'];
         }
-    }
 
-    public function actionClick()
-    {
-        if (Yii::$app->request->isAjax) {
-            $shortCode = Yii::$app->request->post('short_code');
-            $shortener = Shortener::findOne(['shortened' => $shortCode]);
-            $shortenerId = $shortener ? $shortener->id : 0;
-            $logClicks = ShortenerLogClicks::find()->where(['shortener_id' => $shortenerId])->one();
-            if (!$logClicks) {
-                $logClicks = new ShortenerLogClicks();
-                $logClicks->shortener_id = $shortenerId;
-                $logClicks->clicks = 1;
-            } else {
-                $logClicks->clicks = $logClicks->clicks + 1;
-            }
-            $logClicks->save();
-
-            $logIP = new ShortenerLogIP();
-            $logIP->shortener_id = $shortenerId;
-            $logIP->ip_address = Yii::$app->request->userIP;
-            $logIP->save();
-
-            if ($logClicks->hasErrors()) {
-                throw new HttpException(400, $logClicks->getFirstError('shortener_id'));
-            }
-
-            return true;
+        if (!$entry->validate()) {
+            return ['ok' => false, 'errorMessage' => $entry->getFirstError('url')];
         }
-/*        if ($entry->hasErrors()) {
-            throw new HttpException(400, $entry->getFirstError('url'));
+
+        try {
+            $shortener = new Shortener();
+            $shortCode = $shortener->generateShortCode();
+            $shortener->setAttributes([
+                'url' => $entry->url,
+                'shortened' => $shortCode
+            ]);
+            $shortener->save();
+
+            $shortUrl = Yii::$app->urlManager->createAbsoluteUrl(['link/click', 'shortCode' => $shortCode]);
+            $shortLinkText = Yii::$app->request->serverName . '/' . $shortCode;
+
+            $qrCode = (new QrCode($shortUrl))
+                ->setSize(100)
+                ->setMargin(5);
+            $qrCode->writeFile(__DIR__ . '/../web/img/qr_code.png');
+
+            return [
+                'ok' => true,
+                'model' => $shortener,
+                'qr_code' => $qrCode->writeDataUri(),
+                'short_link' => $shortUrl,
+                'short_link_text' => $shortLinkText,
+                'short_code' => $shortCode,
+            ];
+        } catch (Exception $e) {
+            return ['ok' => false, 'errorMessage' => 'Непредвиденная ошибка. Мы уже работаем над этим'];
         }
-        return 'Запрос принят!';*/
     }
 
     /**

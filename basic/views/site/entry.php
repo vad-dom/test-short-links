@@ -16,7 +16,6 @@ $this->registerJsFile(
         'id' => 'entry-form',
         'action' => '/site/shorten',
         'enableAjaxValidation' => false,
-        //'validationUrl' => ['entry-validation-url'],
         'options' => ['class' => 'd-flex justify-content-between gap-2'],
     ]);
 ?>

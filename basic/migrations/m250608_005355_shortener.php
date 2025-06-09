@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m250608_005355_add_log extends Migration
+class m250608_005355_shortener extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,35 +13,26 @@ class m250608_005355_add_log extends Migration
             'id' => $this->primaryKey()->comment('ID'),
             'shortener_id' => $this->integer()->notNull()->comment('ID короткой ссылки'),
             'ip_address' => $this->string(45)->notNull()->comment('IP адрес'),
+            'created_at' => $this
+                ->timestamp()
+                ->notNull()
+                ->defaultExpression('CURRENT_TIMESTAMP')
+                ->comment('Время создания'),
         ]);
-        $this->createTable('shortener_log_clicks', [
+        $this->createTable('shortener', [
             'id' => $this->primaryKey()->comment('ID'),
-            'shortener_id' => $this->integer()->notNull()->comment('ID короткой ссылки'),
+            'url' => $this->string(256)->notNull()->comment('Ссылка'),
+            'shortened' => $this->string(16)->notNull()->unique()->comment('Короткая ссылка'),
             'clicks' => $this->integer()->notNull()->defaultValue(0)->comment('Количество переходов'),
         ]);
 
         $this->createIndex('idx-shortener_log_ip-shortener_id', 'shortener_log_ip', 'shortener_id');
-        $this->createIndex(
-            'idx-shortener_log_clicks-shortener_id',
-            'shortener_log_clicks',
-            'shortener_id',
-            true
-        );
 
         $this->addForeignKey(
             'fk-shortener_log_ip-shortener_id',
             'shortener_log_ip',
             'shortener_id',
-            'yii2_shortener',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
-        $this->addForeignKey(
-            'fk-shortener_log_clicks-shortener_id',
-            'shortener_log_clicks',
-            'shortener_id',
-            'yii2_shortener',
+            'shortener',
             'id',
             'CASCADE',
             'CASCADE'
@@ -54,7 +45,7 @@ class m250608_005355_add_log extends Migration
     public function safeDown()
     {
         $this->dropTable('shortener_log_ip');
-        $this->dropTable('shortener_log_clicks');
+        $this->dropTable('shortener');
     }
 
     /*

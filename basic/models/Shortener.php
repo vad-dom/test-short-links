@@ -3,8 +3,6 @@
 namespace app\models;
 
 use DateTime;
-use Yii;
-use yii\base\Model;
 use yii\db\ActiveRecord;
 
 class Shortener extends ActiveRecord
@@ -13,35 +11,25 @@ class Shortener extends ActiveRecord
 
     public static function tableName(): string
     {
-        return 'yii2_shortener';
+        return 'shortener';
     }
 
     public function rules()
     {
         return [
-            [['url'], 'string', 'max' => 256],
-            ['url', 'required', 'message' => 'Заполните поле'],
-            ['url', 'url', 'message' => 'Некорректная ссылка'],
-            ['url', 'isAvailable'],
-            [['shortened'], 'string', 'max' => 16],
-            [['shortened'], 'unique'],
+            ['url', 'string', 'max' => 256],
+            ['shortened', 'string', 'max' => 16],
+            ['shortened', 'unique'],
+            ['clicks', 'integer'],
+            ['clicks', 'default', 'value' => 0],
         ];
     }
 
-    public function isAvailable($attribute, $params)
-    {
-        $curlInit = curl_init($this->$attribute);
-        curl_setopt($curlInit,CURLOPT_CONNECTTIMEOUT,10);
-        curl_setopt($curlInit,CURLOPT_HEADER,true);
-        curl_setopt($curlInit,CURLOPT_NOBODY,true);
-        curl_setopt($curlInit,CURLOPT_RETURNTRANSFER,true);
-        $response = curl_exec($curlInit);
-        curl_close($curlInit);
-        if (!$response) {
-            $this->addError($attribute, 'Данный URL не доступен');
-        }
-    }
-
+    /**
+     * Генерация кода для короткой ссылки
+     *
+     * @return string
+     */
     public function generateShortCode(): string
     {
         $date = new DateTime();
@@ -55,7 +43,6 @@ class Shortener extends ActiveRecord
         ];
         return join("", $code);
     }
-
 }
 
 ?>

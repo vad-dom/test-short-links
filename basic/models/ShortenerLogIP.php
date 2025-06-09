@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-use yii\base\Model;
 use yii\db\ActiveRecord;
 
 class ShortenerLogIP extends ActiveRecord
@@ -19,6 +17,7 @@ class ShortenerLogIP extends ActiveRecord
             [['shortener_id', 'ip_address'], 'required'],
             ['shortener_id', 'integer'],
             ['ip_address', 'string'],
+            ['created_at', 'safe'],
         ];
     }
 
