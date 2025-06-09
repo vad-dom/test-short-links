@@ -29,7 +29,13 @@
       <b>git clone https://github.com/vad-dom/test-short-links.git</b>
     </ul>
   </li>
-  <li>Composer</li>
+  <li>
+    Обновить до последних версий и установить зависимости в Composer: 
+    <ul>
+      <b>composer update</b>
+      <b>composer install</b>
+    </ul>
+  </li>
   <li>
     PHP extensions
     <ul>
