@@ -49,5 +49,11 @@
       <b>/basic/config/db.php</b>
     </ul>
   </li>
+  <li>
+    Применить миграцию для создания структуры базы данных:
+    <ul>
+      <b>php yii migrate</b>
+    </ul>
+  </li>
 </ul>
 
