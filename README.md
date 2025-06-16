@@ -46,8 +46,8 @@
   <li>
     Настроить подключение к базе данных:
     <ul>
-      <b>test-short-links/basic/config/db.php</b>
-      <b>поменять на свои значения ключей 'dsn', 'username', 'password'</b>
+      <li></li><b>test-short-links/basic/config/db.php</b></li>
+      <li></li><b>поменять на свои значения ключей 'dsn', 'username', 'password'</b></li>
     </ul>
   </li>
   <li>
