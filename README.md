@@ -60,7 +60,7 @@
     Настроить веб сервер: 
     <ul>
       <li><b>https://www.yiiframework.com/doc/guide/2.0/ru/start-installation Раздел "Настройка веб сервера"</b></li>
-      <li><b>Корневую папку домена указать /basic/web</b></li>
+      <li><b>Корневую папку домена указать /test-short-links/basic/web</b></li>
     </ul>
   </li>
   <li>Открыть главную страницу в браузере и действовать согласно описанию задачи ниже</li>
