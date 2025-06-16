@@ -32,7 +32,7 @@
   <li>
     Перейти в папку basic: 
     <ul>
-      <b>cd basic</b>
+      <b>cd test-short-links/basic</b>
     </ul>
   </li>
   <li>
