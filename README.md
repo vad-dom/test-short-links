@@ -46,7 +46,7 @@
   <li>
     Настроить подключение к базе данных:
     <ul>
-      <b>/basic/config/db.php</b>
+      <b>test-short-links/basic/config/db.php</b>
     </ul>
   </li>
   <li>
