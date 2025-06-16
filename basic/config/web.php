@@ -48,6 +48,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<id:[\d\w]{4}>' => 'link/click',
             ],
         ],
     ],

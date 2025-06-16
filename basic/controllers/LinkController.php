@@ -14,14 +14,14 @@ class LinkController extends Controller
     /**
      * Переход по короткой ссылке
      *
-     * @param string $shortCode
+     * @param string $id
      * @return Response
      * @throws HttpException
      */
-    public function actionClick(string $shortCode): Response
+    public function actionClick(string $id): Response
     {
         try {
-            $shortener = Shortener::findOne(['shortened' => $shortCode]);
+            $shortener = Shortener::findOne(['shortened' => $id]);
             if (!$shortener) {
                 throw new HttpException(404, 'Ссылка не найдена');
             }

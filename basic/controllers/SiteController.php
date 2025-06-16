@@ -87,15 +87,20 @@ class SiteController extends Controller
         }
 
         try {
-            $shortener = new Shortener();
-            $shortCode = $shortener->generateShortCode();
-            $shortener->setAttributes([
-                'url' => $entry->url,
-                'shortened' => $shortCode
-            ]);
-            $shortener->save();
+            $shortener = Shortener::findOne(['url' => $entry->url]);
+            if ($shortener) {
+                $shortCode = $shortener->shortened;
+            } else {
+                $shortener = new Shortener();
+                $shortCode = $shortener->generateShortCode();
+                $shortener->setAttributes([
+                    'url' => $entry->url,
+                    'shortened' => $shortCode
+                ]);
+                $shortener->save();
+            }
 
-            $shortUrl = Yii::$app->urlManager->createAbsoluteUrl(['link/click', 'shortCode' => $shortCode]);
+            $shortUrl = Yii::$app->request->hostInfo . '/' . $shortCode;
             $shortLinkText = Yii::$app->request->serverName . '/' . $shortCode;
 
             $qrCode = (new QrCode($shortUrl))
