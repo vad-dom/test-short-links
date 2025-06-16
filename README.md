@@ -5,6 +5,7 @@
   <li>PHP >= 7.4</li>
   <li>MySQL >= 5.7</li>
   <li>Composer</li>
+  <li>Git</li>
   <li>
     PHP extensions
     <ul>
