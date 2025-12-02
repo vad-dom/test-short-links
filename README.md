@@ -36,9 +36,8 @@
     </ul>
   </li>
   <li>
-    Обновить до последних версий и установить зависимости в Composer: 
+    Установить зависимости в Composer: 
     <ul>
-      <li><b>composer update</b></li>
       <li><b>composer install</b></li>
     </ul>
   </li>
@@ -59,7 +58,6 @@
   <li>
     Настроить веб сервер: 
     <ul>
-      <li><b>https://www.yiiframework.com/doc/guide/2.0/ru/start-installation Раздел "Настройка веб сервера"</b></li>
       <li><b>Корневую папку домена указать /test-short-links/basic/web</b></li>
     </ul>
   </li>
